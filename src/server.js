@@ -15,11 +15,12 @@ app.use((req, res, next) => {
     next();    
 });
 
-mongoose.connect(MONGO_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch((err) => {
-        console.error("MongoDb Connection Error", err.message);       
-    });
+try {
+    await mongoose.connect(MONGO_URI);
+    console.log('Connected to MongoDB');
+} catch (err) {
+    console.error("MongoDb Connection Error", err.message);
+}
 
 
 app.post('/api/users', async (req,res) => {
@@ -37,7 +38,7 @@ app.post('/api/users', async (req,res) => {
 });
 
 
-app.get('/api/users', async (req,res) => {
+app.get('/api/getUsers', async (req,res) => {
     try {
         const users = await User.find();
         return res.status(200).json(users);
