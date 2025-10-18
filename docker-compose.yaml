@@ -1,0 +1,24 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb_container
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+
+  testapi:
+    build: .
+    container_name: simple_api_container
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+      - /app/node_modules    
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/userDB
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
